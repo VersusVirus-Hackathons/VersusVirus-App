@@ -1,0 +1,39 @@
+{
+  "topics": [
+    {
+      "id": "afterthecrisis",
+      "color": "#040404",
+      "backgroundColor": "#EEEEEE"
+    },
+    {
+      "id": "dataandfacts",
+      "color": "#3B2501",
+      "backgroundColor": "#FFEAB6"
+    },
+    {
+      "id": "economical",
+      "color": "#400832",
+      "backgroundColor": "#FFDAF6"
+    },
+    {
+      "id": "education",
+      "color": "#012524",
+      "backgroundColor": "#C2F5E9"
+    },
+    {
+      "id": "prevention",
+      "color": "#102046",
+      "backgroundColor": "#CFDFFF"
+    },
+    {
+      "id": "protection",
+      "color": "#0B1D05",
+      "backgroundColor": "#D1F7C4"
+    },
+    {
+      "id": "supportrequestforhelp",
+      "color": "#102046",
+      "backgroundColor": "#9CC7FF"
+    }
+  ]
+}

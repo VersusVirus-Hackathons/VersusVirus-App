@@ -1,0 +1,86 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "Image",
+      "field": "project",
+      "type": "Project",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Image",
+          "field": "project"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Image",
+          "field": "project"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[projectId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Image",
+          "field": "project"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Image",
+      "field": "Project"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Image",
+      "field": "user",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "UserResumeToken",
+      "field": "userId",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "UserResumeToken",
+      "field": "user",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "UserLoginToken",
+      "field": "userId",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "UserLoginToken",
+      "field": "user",
+      "arity": "Optional"
+    }
+  ]
+}

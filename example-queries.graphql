@@ -1,0 +1,159 @@
+# --------------------- User --------------------
+
+# Get User
+{
+  user(where: { email: "EMAIL" }) {
+    email
+    team {
+      id
+    }
+  }
+}
+
+# Get Users
+{
+  users(first: 50) {
+    firstname
+    lastname
+    email
+  }
+}
+
+# Users with no team
+{
+  users(where: { team: null }) {
+    id
+    team {
+      id
+    }
+  }
+}
+
+# Users with admin role
+{
+  users(
+    where: {
+      roles: {some: {id: {equals: "admin"}}}
+    }) {
+    id
+    roles {
+      id
+    }
+  }
+}
+
+# Create user
+mutation {
+  createOneUser(
+    data: {
+      firstname: " "
+      lastname: " "
+      emailConfirmed: true
+      phoneNumber: " "
+      city: " "
+      email: "EMAIL"
+    }
+  ) {
+    email
+  }
+}
+
+# Anonymize user
+mutation {
+  anonymizeOneUser(email: "EMAIL")
+}
+
+# Move user to team
+mutation {
+  updateOneUser(
+    where: { email: "EMAIL" }
+    data: { team: { connect: { id: "TEAM_ID" } } }
+  ) {
+    id
+    email
+    team {
+      id
+    }
+  }
+}
+
+# -------------------- Team -----------------------
+
+# Get team
+{
+  team(where: { id: "TEAM_ID" }) {
+    id
+    primaryTopic {
+      id
+    }
+    challengeSelected {
+      id
+      title
+    }
+    members {
+      email
+    }
+  }
+}
+
+# ⚠ Recreate all teams ⚠
+mutation {
+  recreateAllTeams {
+    teams {
+      id
+      members {
+        email
+      }
+    }
+  }
+}
+
+# ----------------- Project -------------------
+
+# ⚠ Set all projects to published ⚠
+mutation {
+  updateManyProject(data: { isPublished: true }, where: {}) {
+    count
+  }
+}
+
+# ----------------- Challenge -------------------
+
+# Get challenge
+{
+  challenge(where: { id: "CHALLENGE_ID" }) {
+    id
+    primaryTopic {
+      id
+    }
+  }
+}
+
+# Apply challenge
+mutation {
+  updateOneTeam(
+    where: { id: "TEAM_ID" }
+    data: { challengeSelected: { connect: { title: "TITLE" } } }
+  ) {
+    id
+    challengeSelected {
+      id
+      title
+    }
+    challengesToSelect {
+      id
+      title
+    }
+  }
+}
+
+# Assign challenges upon voting
+mutation {
+  choseTeamChallengeVoteWinner {
+    success
+    teamsUpdated
+    teams {
+      id
+    }
+  }
+}

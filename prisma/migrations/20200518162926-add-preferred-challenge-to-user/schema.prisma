@@ -1,0 +1,241 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+model Image {
+  id        String   @default(uuid()) @id
+  base64    String
+  user      User?
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
+}
+
+model Thumbnail {
+  id      String    @default(uuid()) @id
+  base64  String
+  Project Project[]
+}
+
+model Mentor {
+  id        String        @default(uuid()) @id
+  email     String        @unique
+  name      String
+  skills    String
+  linkedin  String
+  languages String
+  topics    HackerTopic[] @relation(references: [id])
+}
+
+model UserResumeToken {
+  id          String   @default(uuid()) @id
+  hashedToken String   @unique
+  created     DateTime @default(now())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+}
+
+model UserLoginToken {
+  id          String   @default(uuid()) @id
+  hashedToken String   @unique
+  created     DateTime @default(now())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+}
+
+model HackerType {
+  id          String @id
+  title       String @unique
+  description String
+  users       User[] @relation(references: [id])
+}
+
+model HackerSkill {
+  id          String @id
+  title       String @unique
+  description String
+  users       User[] @relation(references: [id])
+}
+
+model HackerTopic {
+  id                String      @id
+  title             String      @unique
+  description       String
+  users             User[]      @relation(references: [id])
+  primaryChallenges Challenge[] @relation("primaryTopic")
+  mentors           Mentor[]    @relation(references: [id])
+  teams             Team[]
+  slackId           String?
+}
+
+model UserRole {
+  id    String @id
+  users User[] @relation(references: [id])
+}
+
+model Challenge {
+  id                              String              @default(uuid()) @id
+  title                           String              @unique
+  context                         String
+  challenge                       String
+  solution                        String?
+  resources                       String?
+  commentsByTeam                  String?
+  organization                    String?
+  contactName                     String?
+  contactEmail                    String?
+  teamsThatCanSelectThisChallenge Team[]              @relation("challengesToSelect", references: [id])
+  teamsThatSelectedThisChallenge  Team[]              @relation("challengeSelected")
+  projects                        Project[]
+  primaryTopicId                  String
+  primaryTopic                    HackerTopic         @relation("primaryTopic", fields: [primaryTopicId], references: [id])
+  teamChallengeVotes              TeamChallengeVote[]
+  usersThatPreferThisChallenge    User[]
+}
+
+model TeamChallengeVote {
+  id          String    @default(uuid()) @id
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  teamId      String?
+  team        Team?     @relation(fields: [teamId], references: [id])
+  score       Int
+
+  @@unique([userId, challengeId, teamId])
+}
+
+model Team {
+  id                  String              @id
+  challengesToSelect  Challenge[]         @relation("challengesToSelect", references: [id])
+  members             User[]
+  challengeSelectedId String?
+  challengeSelected   Challenge?          @relation("challengeSelected", fields: [challengeSelectedId], references: [id])
+  projects            Project[]
+  slackId             String?
+  challengeVotes      TeamChallengeVote[]
+  primaryTopicId      String?
+  primaryTopic        HackerTopic?        @relation(fields: [primaryTopicId], references: [id])
+  tags                String[]
+}
+
+model User {
+  id                               String              @default(uuid()) @id
+  firstname                        String
+  lastname                         String
+  profilePhotoId                   String?
+  profilePhoto                     Image?              @relation(fields: [profilePhotoId], references: [id])
+  email                            String              @unique
+  emailConfirmed                   Boolean
+  phoneNumber                      String
+  languages                        String[]
+  city                             String
+  hackerTypes                      HackerType[]        @relation(references: [id])
+  hackerSkills                     HackerSkill[]       @relation(references: [id])
+  hackerTopics                     HackerTopic[]       @relation(references: [id])
+  roles                            UserRole[]          @relation(references: [id])
+  loginTokens                      UserLoginToken[]
+  resumeTokens                     UserResumeToken[]
+  possibleTeamMemberEmails         String?
+  participateInTeamBuildingSession Boolean?            @default(false)
+  linkedin                         String?
+  instagram                        String?
+  facebook                         String?
+  twitter                          String?
+  teamId                           String?
+  team                             Team?               @relation(fields: [teamId], references: [id])
+  teamChallengeVotes               TeamChallengeVote[]
+  devpostUrl                       String?
+  isAnonymized                     Boolean             @default(false)
+  preferredChallengeId             String?
+  preferredChallenge               Challenge?          @relation(fields: [preferredChallengeId], references: [id])
+}
+
+enum ScheduleType {
+  EXTERNAL_LINK
+  INTERNAL_LINK
+}
+
+model Schedule {
+  id    String       @default(uuid()) @id
+  from  DateTime
+  to    DateTime
+  title String
+  type  ScheduleType
+  data  String
+  color String?
+
+  @@unique([from, to])
+}
+
+model Project {
+  id               String     @default(uuid()) @id
+  title            String
+  tagline          String
+  thumbnailId      String?
+  thumbnail        Thumbnail? @relation(fields: [thumbnailId], references: [id])
+  description      String?
+  technologiesUsed String?
+  obstacles        String?
+  accomplishments  String?
+  learnings        String?
+  nextSteps        String?
+  videoUrl         String?
+  urls             String[]
+  images           Image[]
+  challenge        Challenge? @relation(fields: [challengeId], references: [id])
+  challengeId      String?
+  team             Team?      @relation(fields: [teamId], references: [id])
+  teamId           String?
+}
+
+model Submission {
+  id                               String              @default(uuid()) @id
+  title                            String
+  url                              String
+  tagline                          String
+  createdAt                        DateTime
+  description                      String
+  video                            String?
+  website                          String?
+  file                             String?
+  desiredPrizes                    String?
+  builtWith                        String?
+  slackChannel                     String?
+  relevanceForEco                  String?
+  relevanceForChallenge            String?
+  potentialForImpact               String?
+  progressAchieved                 String?
+  projectAddedValue                String?
+  projectContinuation              String?
+  projectPlans                     String?
+  teamMembersScreen                String
+  collegeUniversitiesOfTeamMembers String?
+  additionalTeamMemberCount        Int
+  challengeId                      String
+  challenge                        SubmissionChallenge @relation(fields: [challengeId], references: [id])
+  submitterEmail                   String
+  teamMembers                      SubmissionUser[]    @relation(references: [id])
+}
+
+model SubmissionChallenge {
+  id          String     @default(uuid()) @id
+  title       String
+  description String?
+  topic       String?
+  submission  Submission
+}
+
+model SubmissionUser {
+  id          String       @default(uuid()) @id
+  email       String       @unique
+  firstName   String
+  lastName    String
+  screenName  String
+  submissions Submission[] @relation(references: [id])
+}

@@ -1,0 +1,15 @@
+# IF THERE'S A GIT CONFLICT IN THIS FILE, DON'T SOLVE IT MANUALLY!
+# INSTEAD EXECUTE `prisma migrate fix`
+# Prisma Migrate lockfile v1
+# Read more about conflict resolution here: TODO
+
+20200514213527-prisma-beta
+20200514215158-prisma-beta-initial
+20200514215239-prisma-beta-initial
+20200515165445-optional-user-on-image
+20200515165812-nullable-user-tokens
+20200518161155-make-stuff-optional
+20200518162134-add-prefereded-challenge-to-user
+20200518162926-add-preferred-challenge-to-user
+20200526113218-add-is-published-on-project
+20200530200102-adding-fields-for-jury
