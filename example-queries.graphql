@@ -117,6 +117,19 @@ mutation {
   }
 }
 
+# List published projects
+{
+  projects(where: {
+    isPublished: {
+      equals: true
+    }
+  }
+    first: 100
+  ) {
+    title
+  }
+}
+
 # ----------------- Challenge -------------------
 
 # Get challenge
