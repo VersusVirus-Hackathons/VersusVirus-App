@@ -16,28 +16,7 @@ module.exports = {
           destination: "/api/__health",
           permanent: true,
         },
-        {
-          source: "/challengeselection",
-          destination: "/team/challenge",
-          permanent: true,
-        },
       ];
-
-      if (process.env.HAS_FEEDBACK) {
-        redirects.push({
-          source: "/feedback",
-          destination: process.env.FEEDBACK_URL,
-          permanent: true,
-        });
-      }
-
-      if (process.env.SLACK_SIGNUP_URL) {
-        redirects.push({
-          source: "/slack",
-          destination: process.env.SLACK_SIGNUP_URL,
-          permanent: true,
-        });
-      }
 
       return redirects;
     },
